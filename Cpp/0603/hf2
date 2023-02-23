@@ -1,0 +1,48 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+int main()
+{
+    stack<char> s1;
+    int m,n,flag=0;
+    string ss;
+    cin>>m>>n;
+    for(int i=0; i<m; i++)
+    {
+        cin>>ss;
+        for(int j=0; j<ss.length(); j++)
+        {
+            if(ss[j]=='S')
+            {
+                s1.push(ss[j]);
+                if(s1.size()>n)
+                {
+                    cout<<"NO"<<endl;
+                    flag=1;
+                    break;
+                }
+            }
+            else if(!s1.empty()&&ss[j]=='X')
+            {
+                s1.pop();
+            }
+            else
+            {
+                cout<<"NO"<<endl;
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+        {
+            if(s1.empty())
+                cout<<"YES"<<endl;
+            else
+                cout<<"NO"<<endl;
+        }
+        flag=0;
+        while(!s1.empty())
+            s1.pop();
+    }
+    return 0;
+}

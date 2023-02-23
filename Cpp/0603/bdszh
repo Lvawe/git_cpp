@@ -1,0 +1,101 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct snode *stack;
+struct snode{
+    char ch[20];
+    int top;
+};
+
+stack CreateStack(); //创建堆栈
+void push(stack s,char c); //入栈
+char pop(stack s); //出栈
+
+int main()
+{
+    char ch1[150]; //用来存储符号优先级
+    ch1['(']=0;
+    ch1['+']=1;
+    ch1['-']=1;
+    ch1['*']=2;
+    ch1['/']=2;
+    char s[21]; //用来存储中缀表达式
+    scanf("%s",s);
+    int l=strlen(s);
+    stack st=CreateStack();
+    int flag=0; //该标志位用来控制格式输出
+    for(int i=0;i<l;i++) //遍历中缀表达式符号
+    {
+        if(s[i]=='(')
+        {
+            push(st,s[i]);
+        }
+        else if(s[i]==')')
+        {
+            char t;
+            t=pop(st);
+            while(t!='(')
+            {
+                printf(" %c",t);
+                t=pop(st);
+            }
+            flag=1;
+        }
+        else if(s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/')
+        {
+            if(s[i]=='+'&&(s[i-1]=='('||i==0));//如果这个+表示正号，不进行操作
+            else if(s[i]=='-'&&(s[i-1]=='('||i==0))//如果这个-表示负号，直接输出
+            {
+                printf("-");
+            }
+            else if(ch1[s[i]]>ch1[st->ch[st->top]]||st->top==-1)
+            {
+                push(st,s[i]);
+                flag=1;
+            }
+            else
+            {
+                printf(" %c",pop(st));
+                while(ch1[s[i]]<=ch1[st->ch[st->top]]&&st->top!=-1)
+                {
+                    printf(" %c",pop(st));
+                }
+                push(st,s[i]);
+                flag=1;
+            }
+        }
+        else //运算数直接输出(包含小数.)
+        {
+            if(flag)
+            {
+                printf(" ");
+                flag=0;
+            }
+            printf("%c",s[i]);
+        }
+    }
+    while(st->top!=-1)//输出堆栈中剩余的符号
+    {
+        printf(" %c",pop(st));
+    }
+    return 0;
+}
+
+stack CreateStack()
+{
+    stack s=(stack)malloc(sizeof(struct snode));
+    s->top=-1;
+    return s;
+}
+
+void push(stack s,char c)
+{
+    (s->top)++;
+    s->ch[s->top]=c;
+}
+
+char pop(stack s)
+{
+    return s->ch[(s->top)--];
+}
